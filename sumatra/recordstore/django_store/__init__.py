@@ -13,6 +13,7 @@ SQLite or PostgreSQL.
 import os
 from textwrap import dedent
 import imp
+import django
 import django.conf as django_conf
 from django.core import management
 from sumatra.recordstore.base import RecordStore
