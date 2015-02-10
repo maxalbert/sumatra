@@ -286,7 +286,16 @@ class DjangoRecordStore(RecordStore):
         from django.db import connection
         cur = connection.cursor()
         for cmd in cmds:
-            cur.execute(cmd)
+            try:
+                cur.execute(cmd)
+            except django.db.utils.OperationalError as ex:
+                if ex.message.startswith('no such table'):
+                    # This table did not exist in the Sumatra version
+                    # from which we are upgrading, so we can't drop it.
+                    pass
+                else:
+                    # Unknown error. Let's re-raise it.
+                    raise
         db_config._create_databases()
 
     def _dump(self, indent=2):
