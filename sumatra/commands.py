@@ -19,7 +19,7 @@ import sumatra
 
 from sumatra.programs import get_executable
 from sumatra.datastore import get_data_store
-from sumatra.projects import Project, load_project
+from sumatra.projects import Project, load_project, SmtNoProjectError
 from sumatra.launch import get_launch_mode
 from sumatra.parameters import build_parameters
 from sumatra.recordstore import get_record_store
@@ -148,7 +148,7 @@ def init(argv):
     try:
         project = load_project()
         parser.error("A project already exists in directory '{0}'.".format(project.path))
-    except Exception:
+    except SmtNoProjectError:
         pass
 
     if not os.path.exists(".smt"):

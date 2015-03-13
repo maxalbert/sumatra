@@ -9,6 +9,7 @@ except ImportError:
 import os
 import hashlib
 from sumatra import commands, launch, datastore
+from sumatra.projects import SmtNoProjectError
 
 originals = []  # use for storing originals of mocked objects
 
@@ -146,7 +147,7 @@ class MockProject(object):
 
 
 def no_project():
-    raise Exception("There is no Sumatra project here")
+    raise SmtNoProjectError("There is no Sumatra project here")
 
 
 def mock_mkdir(path, mode=511):  # octal 777 "-rwxrwxrwx"

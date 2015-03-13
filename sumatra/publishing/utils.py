@@ -9,7 +9,7 @@ Utility functions for use in publishing modules
 import os
 import errno
 from ..compatibility import urlretrieve, urlparse
-from sumatra.projects import load_project
+from sumatra.projects import load_project, SmtNoProjectError
 from sumatra.recordstore import get_record_store
 from sumatra.datastore import DataKey
 
@@ -55,7 +55,7 @@ def determine_project(sumatra_options):
     else:
         try:
             prj = load_project()
-        except IOError:
+        except SmtNoProjectError:
             prj = None
     return prj
 

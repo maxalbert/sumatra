@@ -8,7 +8,7 @@ import shutil
 import os, sys
 import unittest
 import sumatra.projects
-from sumatra.projects import Project, load_project
+from sumatra.projects import Project, load_project, SmtNoProjectError, SmtExistingProjectError
 
 
 class MockDiffFormatter(object):
@@ -179,7 +179,7 @@ class TestProject(unittest.TestCase):
 
     def test__creating_a_second_project_in_the_same_dir_should_raise_an_exception(self):
         proj1 = Project("test_project1", record_store=MockRecordStore())
-        self.assertRaises(Exception,Project, "test_project2")
+        self.assertRaises(Exception, Project, "test_project2")
 
     def test__info(self):
         proj = Project("test_project", record_store=MockRecordStore())
@@ -331,8 +331,13 @@ class TestModuleFunctions(unittest.TestCase):
         proj2 = load_project()
         self.assertEqual(proj1.name, proj2.name)
 
+    def test__load_project__should_raise_exception_if_project_exists(self):
+        proj1 = Project("test_project", record_store=MockRecordStore())
+        assert os.path.exists(".smt/project")
+        self.assertRaises(SmtExistingProjectError, Project, "another_test_project", record_store=MockRecordStore())
+
     def test__load_project_should_raise_exception_if_no_project_in_current_dir(self):
-        self.assertRaises(Exception, load_project)
+        self.assertRaises(SmtNoProjectError, load_project)
 
 
 if __name__ == '__main__':

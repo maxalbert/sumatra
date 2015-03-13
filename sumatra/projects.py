@@ -65,6 +65,14 @@ def _get_project_file(path):
     return os.path.join(path, ".smt", DEFAULT_PROJECT_FILE)
 
 
+class SmtExistingProjectError(Exception):
+    pass
+
+
+class SmtNoProjectError(Exception):
+    pass
+
+
 class Project(object):
     valid_name_pattern = r'(?P<project>\w+[\w\- ]*)'
 
@@ -79,7 +87,7 @@ class Project(object):
         if not os.path.exists(".smt"):
             os.mkdir(".smt")
         if os.path.exists(_get_project_file(self.path)):
-            raise Exception("Sumatra project already exists in this directory.")
+            raise SmtExistingProjectError("Sumatra project already exists in this directory.")
         if re.match(Project.valid_name_pattern, name):
             self.name = name
         else:
@@ -443,7 +451,7 @@ def load_project(path=None):
     while not os.path.isdir(os.path.join(p, ".smt")):
         oldp, p = p, os.path.dirname(p)
         if p == oldp:
-            raise IOError("No Sumatra project exists in the current directory or above it.")
+            raise SmtNoProjectError("No Sumatra project exists in the current directory or above it.")
     mimetypes.init([os.path.join(p, ".smt", "mime.types")])
     # try:
     prj = _load_project_from_json(p)
