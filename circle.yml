@@ -1,0 +1,32 @@
+machine:
+  environment:
+    MINICONDA_ROOT: $HOME/miniconda
+    PATH: $MINICONDA_ROOT/bin:$PATH
+    CIRCLECI_PYTHON_VERSION: 2.7
+
+dependencies:
+  # Note, we used to use the naive caching of docker images, but found that
+  # it was quicker just to pull each time. #rollondockercaching
+  override:
+    # Install conda and add it to PATH
+    - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    - bash miniconda.sh -b -p $MINICONDA_ROOT
+    - hash -r
+
+    # Apply some conda settings, update conda and print info about the installation (for debugging)
+    - conda config --set always_yes yes
+    - conda update -q conda
+    - conda info -a
+
+    - conda create -n testenv --yes python=$CIRCLECI_PYTHON_VERSION pip numpy scipy matplotlib nose dateutil pillow
+    - source activate testenv
+    - pip install -r ci/requirements.txt
+    - pip install -r ci/requirements-test.txt
+    - pip install -r ci/requirements-$CIRCLECI_PYTHON_VERSION.txt
+    - pip install .
+
+
+test:
+  override:
+    - echo $PATH
+    - echo "Test build succeeded."
