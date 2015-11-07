@@ -25,6 +25,5 @@ dependencies:
 
 test:
   override:
-    - echo $PATH
-    - python -c "import sumatra; print(sumatra.__version__)"
-    - echo "Test build succeeded."
+    - echo $PWD
+    - nosetests -v --nologcapture --with-coverage --cover-package=sumatra test/unittests test/system/test_ircr.py
