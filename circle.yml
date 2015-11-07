@@ -2,7 +2,7 @@ machine:
   environment:
     MINICONDA_ROOT: $HOME/miniconda
     PATH: $MINICONDA_ROOT/bin:$PATH
-    CIRCLECI_PYTHON_VERSION: 2.7
+    CIRCLECI_PYTHON_VERSION: 3.4
 
 dependencies:
   # Note, we used to use the naive caching of docker images, but found that
@@ -18,15 +18,13 @@ dependencies:
     - conda update -q conda
     - conda info -a
 
-    - conda create -n testenv --yes python=$CIRCLECI_PYTHON_VERSION pip numpy scipy matplotlib nose dateutil pillow
+    - conda env create -f ci/environment.yml
+    - conda env update -f ci/environment-test.yml
     - source activate testenv
-    - pip install -r ci/requirements.txt
-    - pip install -r ci/requirements-test.txt
-    - pip install -r ci/requirements-$CIRCLECI_PYTHON_VERSION.txt
     - pip install .
-
 
 test:
   override:
     - echo $PATH
+    - python -c "import sumatra; print(sumatra.__version__)"
     - echo "Test build succeeded."
