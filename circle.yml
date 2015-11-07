@@ -1,6 +1,6 @@
 machine:
   python:
-    version: miniconda-3.4.2
+    version: miniconda3-3.4.2
 #  environment:
 #    MINICONDA_ROOT: $HOME/miniconda
 #    PATH: $MINICONDA_ROOT/bin:$PATH
