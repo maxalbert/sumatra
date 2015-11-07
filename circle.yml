@@ -1,19 +1,19 @@
 machine:
   python:
-    version: 3.4
-  environment:
-    MINICONDA_ROOT: $HOME/miniconda
-    PATH: $MINICONDA_ROOT/bin:$PATH
-    CIRCLECI_PYTHON_VERSION: 3.4
+    version: miniconda-3.4.2
+#  environment:
+#    MINICONDA_ROOT: $HOME/miniconda
+#    PATH: $MINICONDA_ROOT/bin:$PATH
+#    CIRCLECI_PYTHON_VERSION: 3.4
 
 dependencies:
   # Note, we used to use the naive caching of docker images, but found that
   # it was quicker just to pull each time. #rollondockercaching
   override:
-    # Install conda and add it to PATH
-    - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
-    - bash miniconda.sh -b -p $MINICONDA_ROOT
-    - hash -r
+#    # Install conda and add it to PATH
+#    - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+#    - bash miniconda.sh -b -p $MINICONDA_ROOT
+#    - hash -r
 
     # Apply some conda settings, update conda and print info about the installation (for debugging)
     - conda config --set always_yes yes
@@ -27,6 +27,9 @@ dependencies:
 
 test:
   override:
+    - which conda
+    - which python
     - echo $PATH
     - echo $PWD
+    - conda env list
     #- nosetests -v --nologcapture --with-coverage --cover-package=sumatra test/unittests test/system/test_ircr.py
