@@ -1,4 +1,4 @@
-name: sumatra
+name: testenv
 dependencies:
   - python=3.4
   - django >=1.6,<1.9

@@ -20,7 +20,7 @@ dependencies:
 
     - conda env create -f ci/environment.yml
     - conda env update -f ci/environment-test.yml
-    - source activate sumatra
+    - source activate testenv
     - pip install .
 
 test:
