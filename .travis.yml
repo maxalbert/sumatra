@@ -10,6 +10,7 @@ env:
     - PATH=/home/travis/miniconda/bin:$PATH
 install:
   - sudo apt-get update
+  - sudo apt-get install firefox xpra
   # We do this conditionally because it saves us some downloading if the
   # version is the same.
   - echo $TRAVIS_PYTHON_VERSION
@@ -36,9 +37,14 @@ install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
+before_script:
+  - xpra start :42
+  - export DISPLAY=:42
 # command to run tests
 script:
-  nosetests -v --nologcapture --with-coverage --cover-package=sumatra test/unittests test/system/test_ircr.py
+  nosetests -v --nologcapture --with-coverage --cover-package=sumatra test/unittests test/system/test_ircr.py test/system/test_webui.py
+after_script:
+  xpra stop :42
 after_failure:
   - ./travis-tool.sh dump_logs
 after_success:

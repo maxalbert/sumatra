@@ -7,3 +7,4 @@ nose
 pillow
 coverage
 coveralls
+selenium
