@@ -2,7 +2,7 @@ name: sumatra-dev
 channels:
   - R
 dependencies:
-  - python =2.7
+  - python
   - coverage
   - django >=1.6,<1.9
   - docutils

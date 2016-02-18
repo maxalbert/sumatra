@@ -1,6 +1,7 @@
 machine:
   environment:
     PYTHON_VERSION: 2.7
+    TESTENV: testenv-$PYTHON_VERSION
     MINICONDA_ROOT: $HOME/miniconda
     PATH: $MINICONDA_ROOT/bin:$PATH
 
@@ -20,12 +21,10 @@ dependencies:
     - conda info -a
 
     # Update conda root environment with all relevant packages
-    - conda env update --name root -f ci/environment.yml
-    - pip install -e ~/sumatra
+    - conda create --name $TESTENV python=$PYTHON_VERSION
+    - conda env update --name $TESTENV -f ci/environment.yml
+    - source activate $TESTENV; pip install -e ~/sumatra
 
 test:
   override:
-    - conda env create -f ci/environment.yml
-    - source activate sumatra-dev; conda env list
-    - conda env list
-    - nosetests -v --nologcapture --with-coverage --cover-package=sumatra test/unittests test/system/test_ircr.py
+    - source activate $TESTENV; nosetests -v --nologcapture --with-coverage --cover-package=sumatra test/unittests test/system/test_ircr.py
