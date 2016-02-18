@@ -1,0 +1,29 @@
+name: sumatra-dev
+channels:
+  - R
+dependencies:
+  - python =2.7
+  - coverage
+  - django >=1.6,<1.9
+  - docutils
+  - future
+  - jinja2
+  - matplotlib
+  - mercurial
+  - numpy
+  - nose
+  - pillow
+  - pyyaml
+  - R
+  - scipy
+  - pip:
+    - bzr
+    - coveralls
+    - django-tagging
+    - gitpython
+    - hgapi
+    - httplib2
+    - parameters
+    - pathlib
+    - sarge
+    - selenium

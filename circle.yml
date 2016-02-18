@@ -1,0 +1,31 @@
+machine:
+  environment:
+    PYTHON_VERSION: 2.7
+    MINICONDA_ROOT: $HOME/miniconda
+    PATH: $MINICONDA_ROOT/bin:$PATH
+
+dependencies:
+  override:
+    # Move CircleCI's default Python environment out of the way to avoid conflicts with conda's Python
+    - mv ~/virtualenvs/ ~/virtualenvs_bak
+
+    # Install conda and add it to PATH
+    - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    - bash miniconda.sh -b -p $MINICONDA_ROOT
+    - hash -r
+
+    # Apply some conda settings, update conda and print info about the installation (for debugging)
+    - conda config --set always_yes yes
+    - conda update -q conda
+    - conda info -a
+
+    # Update conda root environment with all relevant packages
+    - conda env update --name root -f ci/environment.yml
+    - pip install -e ~/sumatra
+
+test:
+  override:
+    - conda env create -f ci/environment.yml
+    - source activate sumatra-dev; conda env list
+    - conda env list
+    - nosetests -v --nologcapture --with-coverage --cover-package=sumatra test/unittests test/system/test_ircr.py
